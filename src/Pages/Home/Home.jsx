@@ -211,6 +211,8 @@ export default function Home() {
                     width: "100%",
                     borderRadius: "1rem",
                     border: "1px solid #ccc",
+                    background: '#F3F3F5',
+                    opacity: '0.8'
                   },
                 }}
               />
