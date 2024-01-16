@@ -1,0 +1,28 @@
+#profile-card-action-button {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  z-index: 1;
+  background: white;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+}
+
+#profile-card-action-button-svg{
+  font-size: 1.1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#profile-card-action-button:hover {
+  background: #f7f7f7;
+}
+
+#profile-card:hover #profile-card-action-button {
+  display: inline-block;
+}
