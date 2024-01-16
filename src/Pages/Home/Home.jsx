@@ -1,6 +1,6 @@
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { Divider, IconButton, ListItemButton, Typography } from "@mui/material";
+import { Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import { IoChatbubble } from "react-icons/io5";
 import { IoPeople } from "react-icons/io5";
 import { FaStore } from "react-icons/fa";
@@ -9,12 +9,22 @@ import { HiArchive } from "react-icons/hi";
 import { LuPanelLeftOpen } from "react-icons/lu";
 import { RiEditBoxLine } from "react-icons/ri";
 import { IoSearch } from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
 import { IoCall } from "react-icons/io5";
 import { IoVideocam } from "react-icons/io5";
+import { IoIosAddCircle } from "react-icons/io";
+import { FaImage } from "react-icons/fa6";
+import { PiStickerFill } from "react-icons/pi";
+import { MdGifBox } from "react-icons/md";
+import { FaSmile } from "react-icons/fa";
+import { IoMdThumbsUp } from "react-icons/io";
+import { BiSolidShare } from "react-icons/bi";
+import { FiSmile } from "react-icons/fi";
 import TextField from "../../Components/CustomComponents/TextFeild/TextField/TextField";
 import MenuIcon from "../../Components/MenuIcon/MenuIcon";
 import ProfileCard from "../../Components/ProfileCard/ProfileCard";
+import CircleListIcon from "../../Components/CustomComponents/CircleListIcon/CircleListIcon";
+import Messege from "../../Components/Messege/Messege";
 
 const MenuIcons = [
   <IoChatbubble />,
@@ -34,6 +44,59 @@ const MenuImageIcons = [
 const profiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const NavbarMenuListIcons = [<IoCall />, <IoVideocam />, <BsThreeDots />];
+
+const ChatFooterIcons = [
+  <IoIosAddCircle />,
+  <FaImage />,
+  <MdGifBox />,
+  <PiStickerFill />,
+];
+
+const messeges = [
+  {
+    user: true,
+    text: "Assalamuwalaikum",
+  },
+  { text: "walaikumussalam" },
+  {
+    user: true,
+    text: "What are you doing?",
+  },
+  { text: "Nothing" },
+  {
+    user: true,
+    text: "I'm doing my work",
+  },
+  {
+    user: true,
+    text: "Assalamuwalaikum",
+  },
+  { text: "walaikumussalam" },
+  {
+    user: true,
+    text: "What are you doing?",
+  },
+  { text: "Nothing" },
+  {
+    user: true,
+    text: "I'm doing my work",
+  },
+  { text: "walaikumussalam" },
+  {
+    user: true,
+    text: "What are you doing?",
+  },
+  { text: "Nothing" },
+  {
+    text: "I'm doing my work too now",
+  },
+];
+
+const chatOptions = [
+  { toolTip: "Emoji", icon: <FiSmile /> },
+  { toolTip: "Share", icon: <BiSolidShare /> },
+  { toolTip: "Options", icon: <BsThreeDotsVertical /> },
+];
 
 export default function Home() {
   return (
@@ -182,6 +245,8 @@ export default function Home() {
             sx={{
               bgcolor: "#fff",
               height: "100vh",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             {/* chat header box */}
@@ -212,19 +277,166 @@ export default function Home() {
 
               <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 {NavbarMenuListIcons.map((icon, index) => (
-                  <ListItemButton
-                    key={index}
+                  <CircleListIcon key={index} icon={icon} />
+                ))}
+              </Box>
+            </Box>
+
+            {/* chat body box */}
+            <Box sx={{ flex: "1 1 100%", overflow: "auto", p: "0.5rem" }}>
+              {/* all messege goes here. It will also come from database. */}
+              {messeges.map((messege, index) =>
+                messege.user ? (
+                  <Box
                     sx={{
-                      borderRadius: "50%",
-                      padding: "0.5rem",
-                      color: "#0976F2",
-                      fontSize: "1.3rem",
-                      fontWeight: 900,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: 'center',
+                      my: "1rem",
+                      "&:hover > #toolTip": {
+                        display: "flex",
+                      },
                     }}
                   >
-                    {icon}
-                  </ListItemButton>
+                    <Box id="toolTip" sx={{ display: "none", gap: "0.2rem" }}>
+                      {[...chatOptions].reverse().map((option, index) => (
+                        <Tooltip
+                          title={option.toolTip}
+                          arrow
+                          enterDelay={200}
+                          placement="top"
+                        >
+                          <Box>
+                            <CircleListIcon
+                              key={index}
+                              icon={option.icon}
+                              styles={{
+                                padding: "0.2rem",
+                                fontSize: "1.1rem",
+                                color: "grey",
+                                "&:hover": { color: "grey" },
+                              }}
+                            />
+                          </Box>
+                        </Tooltip>
+                      ))}
+                    </Box>
+                    <Messege
+                      key={index}
+                      Text={messege.text}
+                      styles={{ float: "right" }}
+                    />
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      my: "0.8rem",
+                      "&:hover > #toolTip": {
+                        display: "flex",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        src="https://picsum.photos/200"
+                        alt="Profile Image"
+                      />
+                    </Box>
+                    <Messege
+                      key={index}
+                      Text={messege.text}
+                      styles={{ bgcolor: "#F0F0F0", color: "black" }}
+                    />
+                    <Box id="toolTip" sx={{ display: "none", gap: "0.2rem" }}>
+                      {chatOptions.map((option, index) => (
+                        <Tooltip
+                          title={option.toolTip}
+                          arrow
+                          enterDelay={200}
+                          placement="top"
+                        >
+                          <Box>
+                            <CircleListIcon
+                              key={index}
+                              icon={option.icon}
+                              styles={{
+                                padding: "0.2rem",
+                                fontSize: "1.1rem",
+                                color: "grey",
+                                "&:hover": { color: "grey" },
+                              }}
+                            />
+                          </Box>
+                        </Tooltip>
+                      ))}
+                    </Box>
+                  </Box>
+                )
+              )}
+            </Box>
+
+            {/* chat footer box */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "1rem",
+                px: "0.3rem",
+                pb: "0.3rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "1rem",
+                }}
+              >
+                {ChatFooterIcons.map((icon, index) => (
+                  <CircleListIcon key={index} icon={icon} />
                 ))}
+              </Box>
+              <Box sx={{ width: "100%" }}>
+                <TextField
+                  data={{
+                    type: "text",
+                    placeholder: "Aa",
+                    rightIcon: (
+                      <FaSmile
+                        style={{
+                          color: "#0976F2",
+                          cursor: "pointer",
+                          opacity: 1,
+                        }}
+                      />
+                    ),
+                    styles: {
+                      background: "#f5f5f5",
+                      borderRadius: "1rem",
+                      opacity: 1,
+                    },
+                  }}
+                />
+              </Box>
+              <Box>
+                <CircleListIcon icon={<IoMdThumbsUp />} />
               </Box>
             </Box>
           </Box>

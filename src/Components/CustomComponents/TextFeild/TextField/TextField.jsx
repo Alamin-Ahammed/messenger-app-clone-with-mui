@@ -25,7 +25,7 @@ export default function TextField({
         ...styles,
       }}
     >
-      <div style={iconStyles} className="text-field-icon">
+      <div style={{...iconStyles,opacity:styles.opacity}} className="text-field-icon">
         {leftIcon && leftIcon}
       </div>
       <input
@@ -40,7 +40,7 @@ export default function TextField({
         type={type}
         placeholder={placeholder}
       />
-      <div style={iconStyles} className="text-field-icon">
+      <div style={{...iconStyles,opacity:styles.opacity}} className="text-field-icon">
         {rightIcon && rightIcon}
       </div>
     </div>
