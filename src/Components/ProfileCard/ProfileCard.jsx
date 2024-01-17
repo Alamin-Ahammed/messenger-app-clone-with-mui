@@ -21,7 +21,6 @@ export default function ProfileCard({
             position: "relative",
           }}
         >
-          {/* this avatar will come from database */}
           <CardHeader
             avatar={
               <Avatar
