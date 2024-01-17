@@ -5,7 +5,7 @@ export default function ChatListsBox() {
   return (
     <>
         <Container
-          sx={{ maxWidth: "362px", height: "100vh", display: "flex",}}
+          sx={{ display: "flex",}}
           disableGutters
           maxWidth="362px"
         >

@@ -5,9 +5,10 @@ import { BsThreeDots } from "react-icons/bs";
 import MenuIcon from "../../MenuIcon/MenuIcon";
 import TextField from "../../CustomComponents/TextFeild/TextField/TextField";
 import ProfileCard from "../../ProfileCard/ProfileCard";
+import OutletHeadingWithIcon from "../../CustomComponents/OutletHeadingWithIcon/OutletHeadingWithIcon";
 
 /* Here profiles of friends lists will come from database it's also used in ChatBox component to show AddSomeFriends component remember to change there */
-const profiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 0, 1, 0, 1, 0];
+const profiles = [1];
 
 export default function FriendLists() {
   return (
@@ -19,45 +20,19 @@ export default function FriendLists() {
           overflow: "hidden",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "1rem 1rem 1rem 2rem",
-          }}
-        >
-          <Typography variant="h1" sx={{ fontWeight: 900, fontSize: "1.5rem" }}>
-            Chats
-          </Typography>
-
-          <Box
-            sx={{
-              div: {
-                m: "0px",
-                borderRadius: "50%",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              },
-            }}
-          >
-            <MenuIcon
-              icon={
-                <RiEditBoxLine
-                  style={{
-                    color: "black",
-                    fontSize: "1.35rem",
-                  }}
-                />
-              }
+        <OutletHeadingWithIcon
+          headingText="Chats"
+          icon={
+            <RiEditBoxLine
+              style={{
+                color: "black",
+                fontSize: "1.35rem",
+              }}
             />
-          </Box>
-        </Box>
+          }
+        />
 
-        <Box
-          sx={{ paddingInline: "1rem", pb: "1rem",}}
-        >
+        <Box sx={{ paddingInline: "1rem", pb: "1rem" }}>
           <TextField
             data={{
               leftIcon: <IoSearch />,
@@ -92,6 +67,7 @@ export default function FriendLists() {
                 title: "Profile Name",
                 subheader: "Your are now connected or Last Message",
               }}
+              active={"sm"}
             />
           ))}
         </Box>

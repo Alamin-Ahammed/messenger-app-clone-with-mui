@@ -1,0 +1,9 @@
+.active > div > div {
+  color: black;
+  opacity: 1;
+  background: #F0F0F0;
+}
+
+.active > div {
+  background: #F0F0F0;
+}

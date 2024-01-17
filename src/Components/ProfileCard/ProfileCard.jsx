@@ -1,13 +1,9 @@
-import {
-  Avatar,
-  Card,
-  CardHeader,
-  ListItem,
-} from "@mui/material";
+import { Avatar, Box, Card, CardHeader, ListItem } from "@mui/material";
 import "./ProfileCard.css";
 
 export default function ProfileCard({
   data: { image, action, title, subheader, styles = {} },
+  active,
 }) {
   return (
     <>
@@ -32,11 +28,37 @@ export default function ProfileCard({
                 sx={{
                   width: "45px",
                   height: "45px",
-                  ...styles.avatarStyles
+                  ...styles.avatarStyles,
+                  img: {
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  },
+                  position: "relative",
+                  overflow: "visible",
                 }}
                 alt="Image"
               >
                 {image}
+                <Box
+                  sx={{
+                    width:
+                      (active === "sm" && "11px") ||
+                      (active === "md" && "12px") ||
+                      (active === "lg" && "18px"),
+                    height:
+                      (active === "sm" && "11px") ||
+                      (active === "md" && "12px") ||
+                      (active === "lg" && "18px"),
+                    background: "#56CD37",
+                    border: "2px solid #fff",
+                    borderRadius: "50%",
+                    position: "absolute",
+                    bottom: active === 'lg' ? "6px": "0px",
+                    right: active === 'lg' ? "5px": "2px",
+                  }}
+                />
               </Avatar>
             }
             action={action && action}

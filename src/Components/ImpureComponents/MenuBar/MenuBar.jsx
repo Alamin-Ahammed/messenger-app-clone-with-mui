@@ -6,7 +6,8 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 import { HiArchive } from "react-icons/hi";
 import { LuPanelLeftOpen } from "react-icons/lu";
 import MenuIcon from "../../MenuIcon/MenuIcon";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import "./MenuBar.css";
 
 const MenuIcons = [
   {
@@ -54,9 +55,9 @@ export default function MenuBar() {
       >
         <Box>
           {MenuIcons.map((menuIcon) => (
-            <Link to={menuIcon.path} key={menuIcon.path}>
+            <NavLink to={menuIcon.path} key={menuIcon.path}>
               <MenuIcon icon={menuIcon.icon} />
-            </Link>
+            </NavLink>
           ))}
 
           <Divider sx={{ my: "1.5rem" }} variant="middle" />
