@@ -5,6 +5,8 @@ import People from "../Pages/People/People";
 import MarketPlace from "../Pages/MarketPlace/MarketPlace";
 import Requests from "../Pages/Requests/Requests";
 import Archive from "../Pages/Archive/Archive";
+import Registration from "../Pages/Registration/Registration";
+import Login from "../Pages/Login/Login";
 
 export const router = createBrowserRouter([
   {
@@ -36,5 +38,13 @@ export const router = createBrowserRouter([
   {
     path: "*",
     element: <div>404</div>,
+  },
+  {
+    path: "register",
+    element: <Registration />,
+  },
+  {
+    path: "login",
+    element: <Login />,
   },
 ]);
