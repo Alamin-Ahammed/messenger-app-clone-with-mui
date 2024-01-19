@@ -5,7 +5,7 @@
 // const validateInput = (input) => {
 //     const { inputName, value } = input;
 //     let error = "";
-  
+
 //     switch (inputName) {
 //       case "Name":
 //         // Check if Name is at least 3 characters
@@ -13,7 +13,7 @@
 //           error = "Name must be at least 3 characters.";
 //         }
 //         break;
-  
+
 //       case "Email":
 //         // Check if Email is a valid email address
 //         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +21,7 @@
 //           error = "Invalid email address.";
 //         }
 //         break;
-  
+
 //       case "Phone":
 //         // Check if Phone contains only numbers
 //         const phoneRegex = /^\d+$/;
@@ -29,7 +29,7 @@
 //           error = "Phone must contain only numbers.";
 //         }
 //         break;
-  
+
 //       case "Country":
 //         // Check if Country contains only text
 //         const textRegex = /^[A-Za-z]+$/;
@@ -37,21 +37,21 @@
 //           error = "Country must contain only text.";
 //         }
 //         break;
-  
+
 //       case "City":
 //         // Check if City contains only text
 //         if (!textRegex.test(value)) {
 //           error = "City must contain only text.";
 //         }
 //         break;
-  
+
 //       case "Password":
 //         // Check if Password is at least 6 characters
 //         if (value.length < 6) {
 //           error = "Password must be at least 6 characters.";
 //         }
 //         break;
-  
+
 //       case "ConfirmPassword":
 //         // Check if Confirm Password matches Password
 //         const password = '';
@@ -59,15 +59,13 @@
 //           error = "Passwords do not match.";
 //         }
 //         break;
-  
+
 //       default:
 //         break;
 //     }
-  
+
 //     return error;
 //   };
-  
-
 
 // export default function Registration() {
 //   const navigate = useNavigate();
@@ -78,7 +76,7 @@
 //     [...e.target].forEach((element) => {
 //         if (element.tagName === 'INPUT') {
 //             if (e.target[e.target.length - 4].value === element.value) {
-                
+
 //             }
 //             validateInput({
 //                 inputName: element.name,
@@ -157,18 +155,10 @@
 //   );
 // }
 
-
-
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import messengerIcon from "../../assets/messenger.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -186,19 +176,38 @@ const Registration = () => {
       ConfirmPassword: "",
     },
     validationSchema: Yup.object({
-      Name: Yup.string().matches(/^[A-Za-z ]+$/, "Name must contain only text.").min(3, "Name must be at least 3 characters.").required("Required"),
+      Name: Yup.string()
+        .matches(/^[A-Za-z ]+$/, "Name must contain only text.")
+        .min(3, "Name must be at least 3 characters.")
+        .test(
+          "no-more-than-one-space",
+          "Name cannot contain more than one space.",
+          (value) => !value || value.split(" ").length <= 2
+        )
+        .required("Required"),
       Email: Yup.string().email("Invalid email address.").required("Required"),
-      Phone: Yup.string().matches(/^\d+$/, "Phone must contain only numbers.").required("Required"),
-      Country: Yup.string().matches(/^[A-Za-z]+$/, "Country must contain only text.").required("Required"),
-      City: Yup.string().matches(/^[A-Za-z]+$/, "City must contain only text.").required("Required"),
-      Password: Yup.string().min(6, "Password must be at least 6 characters.").required("Required"),
+      Phone: Yup.string()
+        .matches(/^\d+$/, "Phone must contain only numbers.")
+        .required("Required"),
+      Country: Yup.string()
+        .matches(/^[A-Za-z]+$/, "Country must contain only text.")
+        .required("Required"),
+      City: Yup.string()
+        .matches(/^[A-Za-z]+$/, "City must contain only text.")
+        .required("Required"),
+      Password: Yup.string()
+        .min(6, "Password must be at least 6 characters.")
+        .max(36, "Password's max range is 36.")
+        .matches(
+          /^(?=.*[A-Za-z])(?=.*\d)/,
+          "Password must contain at least one letter and one number."
+        )
+        .required("Required"),
       ConfirmPassword: Yup.string()
         .oneOf([Yup.ref("Password"), null], "Passwords do not match.")
         .required("Required"),
     }),
-    onSubmit: (values,{resetForm}) => {
-      // Your form submission logic goes here
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
       resetForm();
     },
   });
