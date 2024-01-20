@@ -1,8 +1,9 @@
 import { ListItemButton } from "@mui/material";
 
-export default function CircleListIcon({ icon, styles }) {
+export default function CircleListIcon({ handler,icon, styles }) {
   return (
     <ListItemButton
+    onClick={handler}
       sx={{
         borderRadius: "50%",
         padding: "0.5rem",

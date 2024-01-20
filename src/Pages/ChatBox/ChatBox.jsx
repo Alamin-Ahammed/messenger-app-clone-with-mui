@@ -3,6 +3,11 @@ import ChatBoxBody from "../../Components/ImpureComponents/ChatBoxBody/ChatBoxBo
 import ChatBoxFooter from "../../Components/ImpureComponents/ChatBoxFooter/ChatBoxFooter";
 import { Box, Container } from "@mui/material";
 import AddSomeFriends from "../../Components/ImpureComponents/AddSomeFriends/AddSomeFriends";
+import { IoCall } from "react-icons/io5";
+import { IoVideocam } from "react-icons/io5";
+import { BsThreeDots } from "react-icons/bs";
+import { useState } from "react";
+import ThreeDotsMenu from "../../Components/ThreeDotsMenu/ThreeDotsMenu";
 
 const messeges = [
   // {
@@ -48,9 +53,24 @@ const messeges = [
 const profiles = [1];
 
 export default function ChatBox() {
+  const [isThreeDotsMenuOpen, setIsThreeDotsMenuOpen] = useState(false);
+  const handleCall = () => {
+    console.log("call is clicked");
+  };
+  const handleVideoCall = () => {
+    console.log("video call is clicked");
+  };
+  const handleThreeDotsMenu = () => {
+    setIsThreeDotsMenuOpen(!isThreeDotsMenuOpen);
+  };
+  const NavbarMenuListIcons = [
+    { icon: <IoCall />, handler: handleCall },
+    { icon: <IoVideocam />, handler: handleVideoCall },
+    { icon: <BsThreeDots />, handler: handleThreeDotsMenu },
+  ];
   return (
     <>
-      <Container disableGutters maxWidth="100%">
+      <Container disableGutters maxWidth="100%" sx={{ display: "flex" }}>
         {profiles.length > 0 ? (
           <Box
             sx={{
@@ -58,9 +78,11 @@ export default function ChatBox() {
               height: "100vh",
               display: "flex",
               flexDirection: "column",
+              flexGrow: 2,
             }}
           >
-            <ChatBoxHeader />
+            {/*this ChatBoxHeader component always take an array as argument first arg is icon and second arg is handler function*/}
+            <ChatBoxHeader NavbarMenuListIcons={NavbarMenuListIcons} />
 
             <ChatBoxBody messeges={messeges} />
 
@@ -69,6 +91,7 @@ export default function ChatBox() {
         ) : (
           <AddSomeFriends />
         )}
+        {isThreeDotsMenuOpen && <ThreeDotsMenu />}
       </Container>
     </>
   );

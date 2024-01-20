@@ -1,13 +1,11 @@
 import { Box } from "@mui/material";
 import CircleListIcon from "../../CustomComponents/CircleListIcon/CircleListIcon";
 import ProfileCard from "../../ProfileCard/ProfileCard";
-import { IoCall } from "react-icons/io5";
-import { IoVideocam } from "react-icons/io5";
-import { BsThreeDots } from "react-icons/bs";
 
-const NavbarMenuListIcons = [<IoCall />, <IoVideocam />, <BsThreeDots />];
 
-export default function ChatBoxHeader() {
+export default function ChatBoxHeader({ NavbarMenuListIcons }) {
+ 
+
   return (
     <>
       <Box
@@ -33,13 +31,13 @@ export default function ChatBoxHeader() {
                 },
               },
             }}
-            active={'md'}
+            active={"md"}
           />
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          {NavbarMenuListIcons.map((icon, index) => (
-            <CircleListIcon key={index} icon={icon} />
+          {NavbarMenuListIcons.map((item, index) => (
+            <CircleListIcon key={index} handler={item.handler} icon={item.icon} />
           ))}
         </Box>
       </Box>
