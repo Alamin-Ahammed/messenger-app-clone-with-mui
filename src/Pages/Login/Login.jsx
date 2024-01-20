@@ -1,10 +1,29 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import messengerIcon from "../../assets/messenger.svg";
 import { useNavigate } from "react-router-dom";
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebaseConfig";
+import { useAuthInfo } from "../../Context/authContext/useAuthInfo";
 
 export default function Login() {
-    const navigate = useNavigate();
+  const { authInfo, setAuthInfo } = useAuthInfo();
+  const navigate = useNavigate();
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(e.target.email.value, e.target.password.value);
+    signInWithEmailAndPassword(
+      auth,
+      e.target.email.value,
+      e.target.password.value
+    ).then((userCredential) => {
+      // navigate if email has been verified
+      if (userCredential.user.emailVerified) {
+        const { displayName, email, photoURL, uid } = userCredential.user;
+        setAuthInfo({ displayName, email, photoURL, uid });
+        navigate("/");
+      }
+    });
+  };
   return (
     <Container>
       <Box sx={{ maxWidth: "450px", mx: "auto" }} elevation={3}>
@@ -22,12 +41,26 @@ export default function Login() {
             Login
           </Typography>
         </Box>
-        <Box sx={{ width: "100%" ,div: { width: "100%", my: "0.3rem" }}}>
-            <TextField variant="outlined" label="Email"  />
-            <TextField variant="outlined" label="Password" type="password"  />
+        <Box sx={{ width: "100%", div: { width: "100%", my: "0.3rem" } }}>
+          <form onSubmit={handleLogin}>
+            <TextField
+              name="email"
+              variant="outlined"
+              label="Email"
+              type="email"
+            />
+            <TextField
+              name="password"
+              variant="outlined"
+              label="Password"
+              type="password"
+            />
             <Box>
-              <Button variant="contained" sx={{ width: "100%" }}>Login</Button>
+              <Button type="submit" variant="contained" sx={{ width: "100%" }}>
+                Login
+              </Button>
             </Box>
+          </form>
         </Box>
         <Box sx={{ mt: "1rem" }}>
           <Typography sx={{ fontSize: "0.9rem" }}>

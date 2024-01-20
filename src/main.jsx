@@ -10,7 +10,7 @@ import "@fontsource/roboto/900.css";
 import { CssBaseline } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes.jsx";
-import { AuthContextProvider } from "./Context/authContext/AuthContext.jsx";
+import { AuthContextProvider } from "./Context/authContext/useAuthInfo.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

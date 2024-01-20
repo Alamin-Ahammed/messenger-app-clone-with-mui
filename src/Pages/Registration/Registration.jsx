@@ -1,174 +1,38 @@
-// import { Box, Button, Container, TextField, Typography } from "@mui/material";
-// import messengerIcon from "../../assets/messenger.svg";
-// import { Form, useNavigate } from "react-router-dom";
-
-// const validateInput = (input) => {
-//     const { inputName, value } = input;
-//     let error = "";
-
-//     switch (inputName) {
-//       case "Name":
-//         // Check if Name is at least 3 characters
-//         if (value.trim().length < 3) {
-//           error = "Name must be at least 3 characters.";
-//         }
-//         break;
-
-//       case "Email":
-//         // Check if Email is a valid email address
-//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//         if (!emailRegex.test(value)) {
-//           error = "Invalid email address.";
-//         }
-//         break;
-
-//       case "Phone":
-//         // Check if Phone contains only numbers
-//         const phoneRegex = /^\d+$/;
-//         if (!phoneRegex.test(value)) {
-//           error = "Phone must contain only numbers.";
-//         }
-//         break;
-
-//       case "Country":
-//         // Check if Country contains only text
-//         const textRegex = /^[A-Za-z]+$/;
-//         if (!textRegex.test(value)) {
-//           error = "Country must contain only text.";
-//         }
-//         break;
-
-//       case "City":
-//         // Check if City contains only text
-//         if (!textRegex.test(value)) {
-//           error = "City must contain only text.";
-//         }
-//         break;
-
-//       case "Password":
-//         // Check if Password is at least 6 characters
-//         if (value.length < 6) {
-//           error = "Password must be at least 6 characters.";
-//         }
-//         break;
-
-//       case "ConfirmPassword":
-//         // Check if Confirm Password matches Password
-//         const password = '';
-//         if (value !== password) {
-//           error = "Passwords do not match.";
-//         }
-//         break;
-
-//       default:
-//         break;
-//     }
-
-//     return error;
-//   };
-
-// export default function Registration() {
-//   const navigate = useNavigate();
-
-//   const handleSubmition = (e) => {
-//     e.preventDefault();
-//     console.log(e.target[e.target.length - 3].value);
-//     [...e.target].forEach((element) => {
-//         if (element.tagName === 'INPUT') {
-//             if (e.target[e.target.length - 4].value === element.value) {
-
-//             }
-//             validateInput({
-//                 inputName: element.name,
-//                 value: element.value
-//             })
-//         }
-//     });
-//   };
-//   return (
-//     <Container
-//       sx={{
-//         p: "1rem",
-//       }}
-//     >
-//       <Box sx={{ maxWidth: "450px", mx: "auto" }}>
-//         <Box
-//           sx={{
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             gap: "0.5rem",
-//             m: "1rem",
-//           }}
-//         >
-//           <img src={messengerIcon} />
-//           <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 800 }}>
-//             Registration
-//           </Typography>
-//         </Box>
-//         <Box sx={{ width: "100%", div: { width: "100%", my: "0.3rem" } }}>
-//           <Form onSubmit={(e) => handleSubmition(e)}>
-//             <TextField variant="outlined" label="Name" />
-//             <TextField variant="outlined" label="Email" />
-//             <TextField variant="outlined" label="Phone Number" />
-//             <Box sx={{ display: "flex", gap: "1rem" }}>
-//               <TextField variant="outlined" label="Country" />
-//               <TextField variant="outlined" label="City" />
-//             </Box>
-//             <TextField
-//               helperText="Must be at least 6 characters"
-//               variant="outlined"
-//               label="Password"
-//               type="password"
-//             />
-//             <TextField
-//               variant="outlined"
-//               label="Confirm Password"
-//               type="password"
-//             />
-//             <Box>
-//               <Button type="submit" variant="contained" sx={{ width: "100%" }}>
-//                 Register
-//               </Button>
-//             </Box>
-//           </Form>
-//         </Box>
-
-//         <Box sx={{ mt: "1rem" }}>
-//           <Typography sx={{ fontSize: "0.9rem" }}>
-//             Already have an account?{" "}
-//             <Button variant="Text" onClick={() => navigate("/login")}>
-//               <Typography
-//                 sx={{
-//                   borderBottom: "1px solid #1565C0",
-//                   fontSize: "0.9rem",
-//                   color: "#1565C0",
-//                 }}
-//               >
-//                 Login
-//               </Typography>
-//             </Button>
-//           </Typography>
-//         </Box>
-//       </Box>
-//     </Container>
-//   );
-// }
-
-import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import messengerIcon from "../../assets/messenger.svg";
 import { useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../config/firebaseConfig";
+import { useState } from "react";
+import { useAuthInfo } from "../../Context/authContext/useAuthInfo";
 
 const Registration = () => {
+  const {authInfo,setAuthInfo} = useAuthInfo();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const formik = useFormik({
     initialValues: {
       Name: "",
       Email: "",
+      DateOfBirth: "",
       Phone: "",
       Country: "",
       City: "",
@@ -186,6 +50,13 @@ const Registration = () => {
         )
         .required("Required"),
       Email: Yup.string().email("Invalid email address.").required("Required"),
+      DateOfBirth: Yup.date()
+        .test("dob", "User must be at least 14 years.", (value) => {
+          const ageInMilliseconds = Date.now() - value.getTime();
+          const millisecondsIn12Years = 13 * 365 * 24 * 60 * 60 * 1000;
+          return ageInMilliseconds > millisecondsIn12Years;
+        })
+        .required("Required"),
       Phone: Yup.string()
         .matches(/^\d+$/, "Phone must contain only numbers.")
         .required("Required"),
@@ -207,7 +78,39 @@ const Registration = () => {
         .oneOf([Yup.ref("Password"), null], "Passwords do not match.")
         .required("Required"),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
+      const { Name, Email, DateOfBirth, Phone, Country, City, Password } =
+        values;
+      await createUserWithEmailAndPassword(auth, Email, Password);
+      await sendEmailVerification(auth.currentUser);
+      handleOpen();
+      await updateProfile(auth.currentUser, {
+        displayName: Name,
+      });
+      let reNavigate;
+      reNavigate = setInterval(() => {
+        signInWithEmailAndPassword(auth, Email, Password).then(
+          (userCredential) => {
+            // navigate if email has been verified
+            if (userCredential.user.emailVerified) {
+              const { displayName,photoURL, email, uid } = userCredential.user;
+              setAuthInfo({ displayName,photoURL, email, uid })
+              clearInterval(reNavigate);
+              navigate("/");
+            }
+          }
+        );
+      }, 2000);
+      setTimeout(() => {
+        signInWithEmailAndPassword(auth, Email, Password).then(
+          (userCredential) => {
+            // Delete the user account
+            if (!userCredential.user.emailVerified) {
+              userCredential.user.delete();
+            }
+          }
+        );
+      }, 60 * 1000);
       resetForm();
     },
   });
@@ -248,11 +151,19 @@ const Registration = () => {
             />
 
             <TextField
+              type="date"
               variant="outlined"
-              label="Phone Number"
-              {...formik.getFieldProps("Phone")}
-              error={formik.touched.Phone && Boolean(formik.errors.Phone)}
-              helperText={formik.touched.Phone && formik.errors.Phone}
+              label="Date Of Birth"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              {...formik.getFieldProps("DateOfBirth")}
+              error={
+                formik.touched.DateOfBirth && Boolean(formik.errors.DateOfBirth)
+              }
+              helperText={
+                formik.touched.DateOfBirth && formik.errors.DateOfBirth
+              }
             />
 
             <Box sx={{ display: "flex", gap: "1rem" }}>
@@ -272,6 +183,14 @@ const Registration = () => {
                 helperText={formik.touched.City && formik.errors.City}
               />
             </Box>
+
+            <TextField
+              variant="outlined"
+              label="Phone Number"
+              {...formik.getFieldProps("Phone")}
+              error={formik.touched.Phone && Boolean(formik.errors.Phone)}
+              helperText={formik.touched.Phone && formik.errors.Phone}
+            />
 
             <TextField
               variant="outlined"
@@ -297,7 +216,11 @@ const Registration = () => {
             />
 
             <Box>
-              <Button type="submit" variant="contained" sx={{ width: "100%" }}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ width: "100%" }}
+              >
                 Register
               </Button>
             </Box>
@@ -320,6 +243,31 @@ const Registration = () => {
             </Button>
           </Typography>
         </Box>
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Alert severity="success">
+              "Verification email has been sent to you! you have 60 seconds to
+              verify, otherwise account will be deleted."
+            </Alert>
+          </Box>
+        </Modal>
       </Box>
     </Container>
   );

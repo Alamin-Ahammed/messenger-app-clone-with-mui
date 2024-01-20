@@ -1,11 +1,11 @@
 import './App.css'
-import { useAuthContext } from './Context/authContext/AuthContext'
+import { useAuthInfo } from './Context/authContext/useAuthInfo';
 import Home from './Pages/Home/Home'
 import Login from './Pages/Login/Login';
 
 function App() {
-  const isAuthLoggedIn = useAuthContext();
-  return isAuthLoggedIn ? <Home /> : <Login />
+  const {authInfo} = useAuthInfo();
+  return authInfo?.uid ? <Home /> : <Login />
 }
 
 export default App
