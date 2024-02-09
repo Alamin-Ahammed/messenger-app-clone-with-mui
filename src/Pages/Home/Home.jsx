@@ -6,13 +6,13 @@ import { Outlet } from "react-router-dom";
 export default function Home() {
   return (
     <>
-      <Container disableGutters sx={{ display: "flex" }} maxWidth="100%">
-        <MenuBar />
+      <Container disableGutters sx={{ display: "flex", }} maxWidth="100%">
+        <MenuBar  />
         <Container
           sx={{
             maxWidth: "362px",
             height: "100vh",
-            display: "flex",
+            display: {xs: 'none',md: 'flex'},
             borderRight: "1px solid #ccc",
           }}
           disableGutters

@@ -21,9 +21,21 @@ import { auth } from "../../config/firebaseConfig";
 import { useState } from "react";
 import { useAuthInfo } from "../../Context/authContext/useAuthInfo";
 
+/**
+ * @Description_of_this_component___How_it_works ?
+ * Here formik takes initial arguments, validationSchema property has Yup.object method that takes an indetailed object of form validation. Here Yup.object({propertyName of this argument object must be similar as Input field or Textfield's label}.)
+ * onSubmit function handle everything after submiting the form. It's @values argument is the hole data that user has been added to submit. 
+ * Then by this funciton createUserWithEmailAndPassword() account is being created. 
+ * Then by this sendEmailVerification() it's being checked that user's inputed email is verified or not so it sends email veryfication link on the added email. user has 60 second to verify otherwise accuont will be deleted from that database. To handle this deletation process the SetTimeOut method is working on line 126 or around.
+ * This variable reNavigate is to check is the email has been verified by the user or not. If it is verified by the user then it succesfully log in the user.
+ * updateProfile() function update the name in authentication or currentUser's data in firebase.
+ * @returns 
+ */
+
 const Registration = () => {
   const {authInfo,setAuthInfo} = useAuthInfo();
   const navigate = useNavigate();
+  /* this state (setOpen) is for modal warning. when user will succesfully submit the form then it will be shown.*/
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -107,6 +119,7 @@ const Registration = () => {
             // Delete the user account
             if (!userCredential.user.emailVerified) {
               userCredential.user.delete();
+              clearInterval(reNavigate);
             }
           }
         );

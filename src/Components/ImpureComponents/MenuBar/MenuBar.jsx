@@ -47,13 +47,13 @@ export default function MenuBar() {
           height: "100vh",
           width: "fit-content",
           py: "0.67rem",
-          display: "flex",
+          display: {xs: 'none',md: 'flex'},
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box sx={{gsp: '0rem'}}>
           {MenuIcons.map((menuIcon) => (
             <NavLink to={menuIcon.path} key={menuIcon.path}>
               <MenuIcon icon={menuIcon.icon} />
