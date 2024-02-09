@@ -34,7 +34,7 @@ import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
  */
 
 const Registration = () => {
-  const { authInfo, setAuthInfo } = useAuthInfo();
+  const { setAuthInfo } = useAuthInfo();
   const navigate = useNavigate();
   /* this state (setOpen) is for modal warning. when user will succesfully submit the form then it will be shown.*/
   const [open, setOpen] = useState(false);

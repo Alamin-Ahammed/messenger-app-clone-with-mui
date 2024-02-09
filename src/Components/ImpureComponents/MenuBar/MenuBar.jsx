@@ -1,4 +1,4 @@
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Tooltip } from "@mui/material";
 import { IoChatbubble } from "react-icons/io5";
 import { IoPeople } from "react-icons/io5";
 import { FaStore } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { LuPanelLeftOpen } from "react-icons/lu";
 import MenuIcon from "../../MenuIcon/MenuIcon";
 import { NavLink } from "react-router-dom";
 import "./MenuBar.css";
+import ProfileTooltip from "../ProfileTooltip/ProfileTooltip";
+import { useState } from "react";
 
 const MenuIcons = [
   {
@@ -39,6 +41,7 @@ const MenuImageIcons = [
 ];
 
 export default function MenuBar() {
+  const [showProfielTools, setShowProfileTools] = useState(false);
   return (
     <>
       <Box
@@ -47,13 +50,13 @@ export default function MenuBar() {
           height: "100vh",
           width: "fit-content",
           py: "0.67rem",
-          display: {xs: 'none',md: 'flex'},
+          display: { xs: "none", md: "flex" },
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Box sx={{gsp: '0rem'}}>
+        <Box sx={{ gsp: "0rem" }}>
           {MenuIcons.map((menuIcon) => (
             <NavLink to={menuIcon.path} key={menuIcon.path}>
               <MenuIcon icon={menuIcon.icon} />
@@ -80,11 +83,23 @@ export default function MenuBar() {
             },
           }}
         >
-          <img
-            style={{ borderRadius: "50%", width: "30px", height: "30px" }}
-            src="https://picsum.photos/200"
-            alt="Profile Image"
-          />
+          <Tooltip
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            open={showProfielTools}
+            sx={{ padding: "0" }}
+            title={<ProfileTooltip />}
+            arrow
+            placement="top-start"
+          >
+            <img
+              onClick={()=> setShowProfileTools(!showProfielTools)}
+              style={{ borderRadius: "50%", width: "30px", height: "30px",cursor: 'pointer' }}
+              src="https://picsum.photos/200"
+              alt="Profile Image"
+            />
+          </Tooltip>
           <MenuIcon icon={<LuPanelLeftOpen />} />
         </Box>
       </Box>
