@@ -17,23 +17,24 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../../config/firebaseConfig";
+import { auth, db } from "../../config/firebaseConfig";
 import { useState } from "react";
 import { useAuthInfo } from "../../Context/authContext/useAuthInfo";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 
 /**
  * @Description_of_this_component___How_it_works ?
  * Here formik takes initial arguments, validationSchema property has Yup.object method that takes an indetailed object of form validation. Here Yup.object({propertyName of this argument object must be similar as Input field or Textfield's label}.)
- * onSubmit function handle everything after submiting the form. It's @values argument is the hole data that user has been added to submit. 
- * Then by this funciton createUserWithEmailAndPassword() account is being created. 
+ * onSubmit function handle everything after submiting the form. It's @values argument is the hole data that user has been added to submit.
+ * Then by this funciton createUserWithEmailAndPassword() account is being created.
  * Then by this sendEmailVerification() it's being checked that user's inputed email is verified or not so it sends email veryfication link on the added email. user has 60 second to verify otherwise accuont will be deleted from that database. To handle this deletation process the SetTimeOut method is working on line 126 or around.
  * This variable reNavigate is to check is the email has been verified by the user or not. If it is verified by the user then it succesfully log in the user.
  * updateProfile() function update the name in authentication or currentUser's data in firebase.
- * @returns 
+ * @returns
  */
 
 const Registration = () => {
-  const {authInfo,setAuthInfo} = useAuthInfo();
+  const { authInfo, setAuthInfo } = useAuthInfo();
   const navigate = useNavigate();
   /* this state (setOpen) is for modal warning. when user will succesfully submit the form then it will be shown.*/
   const [open, setOpen] = useState(false);
@@ -99,14 +100,19 @@ const Registration = () => {
       await updateProfile(auth.currentUser, {
         displayName: Name,
       });
+      // here users Information is storing into firestore
+      const userData = values;
+      const collectionRef = collection(db, "AllUsersAccountsDetails");
+      const DocRefToDelete = await addDoc(collectionRef, userData);
+      //-------------------------------------------------------------
       let reNavigate;
       reNavigate = setInterval(() => {
         signInWithEmailAndPassword(auth, Email, Password).then(
           (userCredential) => {
             // navigate if email has been verified
             if (userCredential.user.emailVerified) {
-              const { displayName,photoURL, email, uid } = userCredential.user;
-              setAuthInfo({ displayName,photoURL, email, uid })
+              const { displayName, photoURL, email, uid } = userCredential.user;
+              setAuthInfo({ displayName, photoURL, email, uid });
               clearInterval(reNavigate);
               navigate("/");
             }
@@ -120,6 +126,7 @@ const Registration = () => {
             if (!userCredential.user.emailVerified) {
               userCredential.user.delete();
               clearInterval(reNavigate);
+              deleteDoc(doc(collectionRef,DocRefToDelete.id))
             }
           }
         );
@@ -229,11 +236,7 @@ const Registration = () => {
             />
 
             <Box>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ width: "100%" }}
-              >
+              <Button type="submit" variant="contained" sx={{ width: "100%" }}>
                 Register
               </Button>
             </Box>
