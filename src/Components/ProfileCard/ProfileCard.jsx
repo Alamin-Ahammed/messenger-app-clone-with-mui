@@ -16,7 +16,7 @@ export default function ProfileCard({
           id="profile-card"
           elevation={0}
           sx={{
-            "&:hover": { background: "#f5f5f5" },
+            "&:hover": styles?.background ? { background: styles.background }:{ background: "#f5f5f5" },
             width: "100%",
             position: "relative",
           }}
@@ -34,6 +34,10 @@ export default function ProfileCard({
                     height: "100%",
                     objectFit: "cover",
                     borderRadius: "50%",
+                  },
+                  svg: {
+                    color: '#172B4D',
+                    fontSize: '5rem'
                   },
                   position: "relative",
                   overflow: "visible",

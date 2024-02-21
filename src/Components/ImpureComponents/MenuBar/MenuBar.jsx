@@ -1,4 +1,4 @@
-import { Box, Divider, Tooltip } from "@mui/material";
+import { Box, Button, Divider, Modal, Tooltip } from "@mui/material";
 import { IoChatbubble } from "react-icons/io5";
 import { IoPeople } from "react-icons/io5";
 import { FaStore } from "react-icons/fa";
@@ -42,6 +42,12 @@ const MenuImageIcons = [
 
 export default function MenuBar() {
   const [showProfielTools, setShowProfileTools] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const handleShowAllUserInMessenger = () => {
+    setOpenModal(!openModal);
+    setShowTooltip(false);
+  };
   return (
     <>
       <Box
@@ -56,7 +62,7 @@ export default function MenuBar() {
           alignItems: "center",
         }}
       >
-        <Box sx={{ gsp: "0rem" }}>
+        <Box sx={{ gap: "0rem" }}>
           {MenuIcons.map((menuIcon) => (
             <NavLink to={menuIcon.path} key={menuIcon.path}>
               <MenuIcon icon={menuIcon.icon} />
@@ -89,18 +95,60 @@ export default function MenuBar() {
             disableTouchListener
             open={showProfielTools}
             sx={{ padding: "0" }}
-            title={<ProfileTooltip />}
+            // title={<ProfileTooltip />}
             arrow
             placement="top-start"
           >
             <img
-              onClick={()=> setShowProfileTools(!showProfielTools)}
-              style={{ borderRadius: "50%", width: "30px", height: "30px",cursor: 'pointer' }}
+              onClick={() => setShowProfileTools(!showProfielTools)}
+              style={{
+                borderRadius: "50%",
+                width: "30px",
+                height: "30px",
+                cursor: "pointer",
+              }}
               src="https://picsum.photos/200"
               alt="Profile Image"
             />
           </Tooltip>
-          <MenuIcon icon={<LuPanelLeftOpen />} />
+          <Tooltip
+            title="Explore And Make Friends."
+            arrow
+            placement="right"
+            disableInteractive
+            open={showTooltip}
+          >
+            <Box>
+              <Box
+                onMouseEnter={() => setShowTooltip(true)}
+                onClick={handleShowAllUserInMessenger}
+              >
+                <MenuIcon icon={<LuPanelLeftOpen />} />
+              </Box>
+              <Modal open={openModal} onClose={handleShowAllUserInMessenger}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "100vw",
+                    height: "100vh",
+                    bgcolor: "background.paper",
+                    p: 1,
+                  }}
+                >
+                  {/* Here all the Modal element goes..... */}
+                  <Button
+                    variant="outlined"
+                    onClick={handleShowAllUserInMessenger}
+                  >
+                    Exit --{">"}
+                  </Button>
+                </Box>
+              </Modal>
+            </Box>
+          </Tooltip>
         </Box>
       </Box>
     </>

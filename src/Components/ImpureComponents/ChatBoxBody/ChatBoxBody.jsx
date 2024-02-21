@@ -5,6 +5,7 @@ import { FiSmile } from "react-icons/fi";
 import { BiSolidShare } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ProfileCard from "../../ProfileCard/ProfileCard";
+import { IoPersonOutline } from "react-icons/io5";
 
 const chatOptions = [
   { toolTip: "Emoji", icon: <FiSmile /> },
@@ -12,7 +13,8 @@ const chatOptions = [
   { toolTip: "Options", icon: <BsThreeDotsVertical /> },
 ];
 
-export default function ChatBoxBody({ messeges }) {
+export default function ChatBoxBody({ messeges, profileData = {} }) {
+  const { imageURL, profileName = "", location = "" } = profileData;
   return (
     <>
       <Box sx={{ flex: "1 1 100%", overflow: "auto", p: "0.5rem" }}>
@@ -30,7 +32,7 @@ export default function ChatBoxBody({ messeges }) {
           <ProfileCard
             data={{
               // here image,title,subheader will come from database
-              image: <img src="https://picsum.photos/200" />,
+              image: <img src={imageURL} /> || <IoPersonOutline />,
               styles: {
                 display: "flex",
                 flexDirection: "column",
@@ -40,14 +42,21 @@ export default function ChatBoxBody({ messeges }) {
                   height: "100px",
                   marginBottom: "1rem",
                 },
+                background: 'transparent',
               },
-              title: <Typography variant="h6">Profile Name</Typography>,
+              title: (
+                <Typography variant="h6">
+                  {profileName || "Profile Name"}
+                </Typography>
+              ),
               subheader: (
                 <Box>
                   <Typography variant="body1">
                     You're friends on Messenger
                   </Typography>
-                  <Typography variant="body1">Lives at Dhaka</Typography>
+                  <Typography variant="body1">
+                    {location && `Lives at  ${location}`}{" "}
+                  </Typography>
                 </Box>
               ),
             }}
@@ -59,7 +68,7 @@ export default function ChatBoxBody({ messeges }) {
         </Box>
         <>
           {messeges.map((messege, index) =>
-            messege.user ? (
+            messege.currentUser ? (
               <Box
                 key={index}
                 sx={{

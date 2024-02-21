@@ -1,4 +1,10 @@
-import { ListItemButton, ListItemIcon, SvgIcon } from "@mui/material";
+import {
+  ListItemButton,
+  ListItemIcon,
+  SvgIcon,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 
 export default function MenuIcon({ icon }) {
   return (

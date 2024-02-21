@@ -11,14 +11,19 @@ import { CssBaseline } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes.jsx";
 import { AuthContextProvider } from "./Context/authContext/useAuthInfo.jsx";
-
+import { CurrentConversationProvider } from "./Context/CurrentConversationProvider/CurrentConversationProvider.jsx";
+import { UsersAllFriendsDataProvider } from "./Context/UsersAllFriendsData/UsersAllFriendsData.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <CssBaseline />
     <AuthContextProvider>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <UsersAllFriendsDataProvider>
+        <CurrentConversationProvider>
+          <RouterProvider router={router}>
+            <App />
+          </RouterProvider>
+        </CurrentConversationProvider>
+      </UsersAllFriendsDataProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

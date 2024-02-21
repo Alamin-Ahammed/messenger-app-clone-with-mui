@@ -8,51 +8,13 @@ import { IoVideocam } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { useState } from "react";
 import ThreeDotsMenu from "../../Components/ThreeDotsMenu/ThreeDotsMenu";
-
-const messeges = [
-  // {
-  //   user: true,
-  //   text: "Assalamuwalaikum",
-  // },
-  // { text: "walaikumussalam" },
-  // {
-  //   user: true,
-  //   text: "What are you doing?",
-  // },
-  // { text: "Nothing" },
-  // {
-  //   user: true,
-  //   text: "I'm doing my work",
-  // },
-  // {
-  //   user: true,
-  //   text: "Assalamuwalaikum",
-  // },
-  // { text: "walaikumussalam" },
-  // {
-  //   user: true,
-  //   text: "What are you doing?",
-  // },
-  // { text: "Nothing" },
-  // {
-  //   user: true,
-  //   text: "I'm doing my work",
-  // },
-  // { text: "walaikumussalam" },
-  // {
-  //   user: true,
-  //   text: "What are you doing?",
-  // },
-  // { text: "Nothing" },
-  // {
-  //   text: "I'm doing my work too now",
-  // },
-];
-
-/* Here profiles of friends lists will come from database it's also used in FriendLists component to show the friend list in UI */
-const profiles = [1];
+import { useCurrentConversationProvider } from "../../Context/CurrentConversationProvider/CurrentConversationProvider";
 
 export default function ChatBox() {
+  /* Here profiles of friends lists will come from database it's also used in FriendLists component to show the friend list in UI */
+  const { currentConversation: profiles } = useCurrentConversationProvider();
+  // currentConversation has only one array always because it's the current friend whom is taking the user.
+  const { profileData, messeges } = profiles[0];
   const [isThreeDotsMenuOpen, setIsThreeDotsMenuOpen] = useState(false);
   const handleCall = () => {
     console.log("call is clicked");
@@ -63,6 +25,7 @@ export default function ChatBox() {
   const handleThreeDotsMenu = () => {
     setIsThreeDotsMenuOpen(!isThreeDotsMenuOpen);
   };
+  // These are constant icons for now, in future it may be get changed.
   const NavbarMenuListIcons = [
     { icon: <IoCall />, handler: handleCall },
     { icon: <IoVideocam />, handler: handleVideoCall },
@@ -82,9 +45,12 @@ export default function ChatBox() {
             }}
           >
             {/*this ChatBoxHeader component always take an array as argument first arg is icon and second arg is handler function*/}
-            <ChatBoxHeader NavbarMenuListIcons={NavbarMenuListIcons} />
+            <ChatBoxHeader
+              NavbarMenuListIcons={NavbarMenuListIcons}
+              profileData={profileData}
+            />
 
-            <ChatBoxBody messeges={messeges} />
+            <ChatBoxBody messeges={messeges} profileData={profileData} />
 
             <ChatBoxFooter />
           </Box>
